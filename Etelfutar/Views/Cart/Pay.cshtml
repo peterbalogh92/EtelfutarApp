@@ -1,0 +1,27 @@
+﻿
+@model Etelfutar.Models.Customers
+@{
+	/**/
+
+	ViewBag.Title = "Pay";
+}
+
+<h2>Fizetés</h2>
+
+@using (Html.BeginForm())
+{
+	<div>
+		@Html.LabelFor(m => m.Name)<br />
+		@Html.TextBoxFor(m => m.Name)
+	</div>
+	<div>
+		@Html.LabelFor(m => m.Address)<br />
+		@Html.TextBoxFor(m => m.Address)
+	</div>
+	<div>
+		@Html.LabelFor(m => m.Phone)<br />
+		@Html.TextBoxFor(m => m.Phone)
+	</div>
+	<br />
+	<input type="submit" value="Fizetés" />
+}

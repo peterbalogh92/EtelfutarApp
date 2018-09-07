@@ -1,0 +1,36 @@
+﻿@using Etelfutar.Models;
+@{
+	ViewBag.Title = "Home Page";
+}
+
+
+<div>
+	<h1>Főoldal</h1>
+
+	@{
+		EtelfutarDbEntities entities = new EtelfutarDbEntities();
+
+		var cats = entities.MenuItems.GroupBy(x => x.Category);
+
+	}
+
+	<h2>Kategóriák</h2>
+	@foreach (var item in cats)
+	{
+		@Html.ActionLink(item.Key, "Product", new { category = item.Key })
+		<br />
+	}
+	<h2>TOP 10</h2>
+	@{
+		var result = entities.OrderItems.GroupBy(x => x.ProductId).Select(g => new { Id = entities.MenuItems.FirstOrDefault(mi => mi.Id == g.Key).Name, Quantity = g.Sum(x => x.Quantity) }).ToList();
+		var ordered = result.OrderByDescending(x => x.Quantity).Take(10);
+	}
+
+	@foreach (var item in ordered)
+	{
+		<text>@item.Id: @item.Quantity db</text>
+		<br />
+	}
+
+
+</div>

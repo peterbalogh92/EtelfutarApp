@@ -1,0 +1,45 @@
+﻿@model Etelfutar.Models.Order
+@using Etelfutar.Models;
+
+@{
+	ViewBag.Title = "Kosár";
+}
+
+
+<h2>Kosár</h2>
+
+<table cellspacing="5" cellpadding="5" border="1">
+	<tr>
+		<th>Termék</th>
+		<th>Mennyiség</th>
+		<th>Ár</th>
+		<th>Részösszeg</th>
+		<th></th>
+	</tr>
+
+	@{ int? sum = 0; }
+
+	@if (Session["cart"] != null && ((List<Item>)Session["cart"]).Count > 0)
+	{
+		foreach (var item in (List<Item>)Session["cart"])
+		{
+			sum += (item.Product.Price * item.Quantity);
+			<tr>
+				<td>@item.Product.Name</td>
+				<td>@item.Quantity</td>
+				<td>@item.Product.Price</td>
+				<td>@(item.Product.Price * item.Quantity)</td>
+				<td>@Html.ActionLink("Törlés", "Delete", "Cart", new { id = item.Product.Id }, null)</td>
+			</tr>
+		}
+	}
+	else
+	{
+		<text>A kosár üres!</text>
+	}
+</table>
+<h3>Végösszeg: @sum HUF</h3>
+<br />
+@Html.ActionLink("Rendelés folytatása", "Index", "Home")
+@Html.ActionLink("Rendelés törlése", "Clear", "Cart")
+@Html.ActionLink("Rendelés leadása", "Pay", "Cart")

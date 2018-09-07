@@ -1,0 +1,60 @@
+﻿
+@using Etelfutar.Models;
+
+<!DOCTYPE html>
+
+<html>
+<head>
+	<meta name="viewport" content="width=device-width" />
+	<title>@ViewData["category"]</title>
+</head>
+<body>
+	<div>
+		<h1>@ViewData["category"]</h1>
+		@{
+			EtelfutarDbEntities entities = new EtelfutarDbEntities();
+			string cat = (string)ViewData["category"];
+			string filter = (string)ViewData["filter"];
+			var products = entities.MenuItems.Where(x => x.Category.Equals(cat));
+
+			if (filter != null)
+			{
+
+				products = products.Where(p => p.Name.Contains(filter));
+			}
+		}
+
+		<ul>
+			@foreach (var item in products)
+			{
+				<li>@item.Name: @item.Price HUF - @Html.ActionLink("Kosárba", "Add", "Cart", new { id = item.Id }, null)</li>
+				if (!item.Description.IsEmpty())
+				{
+					@item.Description
+				}
+				if (Convert.ToBoolean(item.Vegatarian))
+				{
+					<text>(vegetáriánus)</text>
+				}
+				if (Convert.ToBoolean(item.Spicy))
+				{
+					<text>(csípős)</text>
+				}
+			}
+		</ul>
+
+		<br />
+
+		@using (Html.BeginForm())
+		{
+			@Html.TextBox("filter")
+			<input type="submit" value="Szűrés" />
+		}
+		
+		<br />
+
+		<p>@TempData["msg"]</p>
+
+	</div>
+</body>
+</html>
